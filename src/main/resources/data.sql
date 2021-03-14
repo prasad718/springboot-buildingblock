@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS USER;
+
+CREATE TABLE USER (
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  user_name VARCHAR(250) UNIQUE,
+  first_name VARCHAR(250),
+  last_name VARCHAR(250),
+  email VARCHAR(250),
+  role  VARCHAR(250),
+  ssn   VARCHAR(250) UNIQUE 
+);
+

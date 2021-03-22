@@ -5,33 +5,40 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 //Entity
 @Entity
-@Table(name="USER")
+@Table(name = "USER")
 public class User {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@Column(name="user_name", length =50,nullable=false,unique=true)
-	private String username;
-	@Column(name="first_name",length =50,nullable =false)
-	private String firstname;
-	@Column(name="last_name",length =50,nullable =false)
-	private String lastname;
-	@Column(name="email",length =50,nullable =false)
-	private String email;
-	@Column(name="role",length =50,nullable =false)
-	private String role;
-	@Column(name="ssn",length =50,nullable =true)
-	private String ssn;
 	
-	//No arg construtor
+	@NotEmpty(message = "User Name Mandtory field. Please provide user name")
+	@Column(name = "user_name", length = 50, nullable = false, unique = true)
+	private String username;
+
+	@Size(min=2 , message ="First Name Should have at least 2 characters")
+	@Column(name = "first_name", length = 50, nullable = false)
+	private String firstname;
+	
+	@Column(name = "last_name", length = 50, nullable = false)
+	private String lastname;
+	
+	@Column(name = "email", length = 50, nullable = false)
+	private String email;
+	
+	@Column(name = "role", length = 50, nullable = false)
+	private String role;
+	
+	@Column(name = "ssn", length = 50, nullable = true)
+	private String ssn;
+
+	// No arg construtor
 	public User() {
 	}
-
-	
-
 
 	public User(Long id, String username, String firstname, String lastname, String email, String role, String ssn) {
 		this.id = id;
@@ -43,7 +50,7 @@ public class User {
 		this.ssn = ssn;
 	}
 
-	//Getter and Setter
+	// Getter and Setter
 	public Long getId() {
 		return id;
 	}
@@ -100,10 +107,9 @@ public class User {
 		this.ssn = ssn;
 	}
 
-
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
 				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + "]";
-	}	
+	}
 }

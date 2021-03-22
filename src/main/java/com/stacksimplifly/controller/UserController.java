@@ -3,6 +3,8 @@ package com.stacksimplifly.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +36,7 @@ public class UserController {
 	}
 
 	@PostMapping("/users")
-	public ResponseEntity<Void> createUser(@RequestBody User user,UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Void> createUser(@Valid @RequestBody User user,UriComponentsBuilder uriBuilder) {
 		System.out.println("user" + user);
 		try {
 			userService.createUser(user);
@@ -55,8 +57,8 @@ public class UserController {
 		try {
 			return userService.getUserById(id);
 		} catch (UserNotFoundException e) {
-		
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+			
 		}
 	}
 

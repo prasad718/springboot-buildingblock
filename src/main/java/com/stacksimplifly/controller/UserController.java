@@ -35,6 +35,7 @@ public class UserController {
 		return userService.getAllUsers();
 	}
 
+	//this method will create the user into data base.
 	@PostMapping("/users")
 	public ResponseEntity<Void> createUser(@Valid @RequestBody User user,UriComponentsBuilder uriBuilder) {
 		System.out.println("user" + user);

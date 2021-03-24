@@ -3,12 +3,14 @@ package com.stacksimplifly.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
+
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,9 +23,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.stacksimplifly.entity.User;
 import com.stacksimplifly.exceptions.UserExistsException;
+import com.stacksimplifly.exceptions.UserNameNotFoundException;
 import com.stacksimplifly.exceptions.UserNotFoundException;
 import com.stacksimplifly.service.UserService;
 
+@Validated
 @RestController
 public class UserController {
 
@@ -37,7 +41,7 @@ public class UserController {
 
 	//this method will create the user into data base.
 	@PostMapping("/users")
-	public ResponseEntity<Void> createUser(@Valid @RequestBody User user,UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<Void> createUser(@Validated @RequestBody User user,UriComponentsBuilder uriBuilder) {
 		System.out.println("user" + user);
 		try {
 			userService.createUser(user);
@@ -53,7 +57,7 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}")
-	public Optional<User> getUserById(@PathVariable long id) {
+	public Optional<User> getUserById(@PathVariable("id") @Min(1) Long id) {
 
 		try {
 			return userService.getUserById(id);
@@ -80,9 +84,17 @@ public class UserController {
 	}
 
 	@GetMapping("/byusername/{name}")
-	public User getUserByUserName(@PathVariable String name) {
+	public User getUserByUserName(@PathVariable String name) throws UserNameNotFoundException {
 
-		return userService.getUserByUserName(name);
+		User user=userService.getUserByUserName(name);
+		
+		if(user==null)
+			throw new UserNameNotFoundException("User Name "+name+" Not found in user repository");
+		
+		return user;
 	}
 
+	
+	
+	
 }

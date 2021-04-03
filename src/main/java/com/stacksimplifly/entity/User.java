@@ -11,14 +11,17 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+
 //Entity
 
 @Entity
 @Table(name = "USER")
-public class User {
+public class User  extends CollectionModel{
 	@Id
 	@GeneratedValue
-	private Long id;
+	private Long userid;
 	
 	@NotEmpty(message = "User Name Mandtory field. Please provide user name")
 	@Column(name = "user_name", length = 50, nullable = false, unique = true)
@@ -55,8 +58,8 @@ public class User {
 	public User() {
 	}
 
-	public User(Long id, String username, String firstname, String lastname, String email, String role, String ssn) {
-		this.id = id;
+	public User(Long userid, String username, String firstname, String lastname, String email, String role, String ssn) {
+		this.userid = userid;
 		this.username = username;
 		this.firstname = firstname;
 		this.lastname = lastname;
@@ -66,12 +69,12 @@ public class User {
 	}
 
 	// Getter and Setter
-	public Long getId() {
-		return id;
+	public Long getUserid() {
+		return userid;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(Long userid) {
+		this.userid = userid;
 	}
 
 	public String getUsername() {
@@ -124,7 +127,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
+		return "User [userid=" + userid + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname
 				+ ", email=" + email + ", role=" + role + ", ssn=" + ssn + "]";
 	}
 }

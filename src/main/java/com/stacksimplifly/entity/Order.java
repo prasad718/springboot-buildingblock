@@ -5,15 +5,18 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="orders")
-public class Order {
+public class Order extends CollectionModel<Order> {
 	
 	@Id
 	@GeneratedValue
@@ -55,10 +58,7 @@ public class Order {
 	private User user;
 
 	public Order() {
-		super();
-		
-		
-		
+		super();	
 	}
 
 

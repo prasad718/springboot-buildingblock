@@ -12,12 +12,16 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
+
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //Entity
 
 @Entity
 @Table(name = "USER")
+//@JsonIgnoreProperties({"firstname","lastname"})
+@JsonFilter(value = "userFilter")
 public class User  extends CollectionModel{
 	@Id
 	@GeneratedValue
@@ -41,6 +45,7 @@ public class User  extends CollectionModel{
 	private String role;
 	
 	@Column(name = "ssn", length = 50, nullable = true)
+	//@JsonIgnore
 	private String ssn;
 
 	@OneToMany(mappedBy = "user")

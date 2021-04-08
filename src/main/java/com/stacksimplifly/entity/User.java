@@ -12,7 +12,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
+
+import com.fasterxml.jackson.annotation.JsonView;
 
 //Entity
 
@@ -21,26 +22,33 @@ import org.springframework.hateoas.EntityModel;
 public class User  extends CollectionModel{
 	@Id
 	@GeneratedValue
+	@JsonView(View.External.class)
 	private Long userid;
 	
 	@NotEmpty(message = "User Name Mandtory field. Please provide user name")
 	@Column(name = "user_name", length = 50, nullable = false, unique = true)
+	@JsonView(View.External.class)
 	private String username;
 
 	@Size(min=2 , message ="First Name Should have at least 2 characters")
 	@Column(name = "first_name", length = 50, nullable = false)
+	@JsonView(View.External.class)
 	private String firstname;
 	
 	@Column(name = "last_name", length = 50, nullable = false)
+	@JsonView(View.External.class)
 	private String lastname;
 	
 	@Column(name = "email", length = 50, nullable = false)
+	@JsonView(View.External.class)
 	private String email;
 	
 	@Column(name = "role", length = 50, nullable = false)
+	@JsonView(View.Internal.class)
 	private String role;
 	
 	@Column(name = "ssn", length = 50, nullable = true)
+	@JsonView(View.Internal.class)
 	private String ssn;
 
 	@OneToMany(mappedBy = "user")

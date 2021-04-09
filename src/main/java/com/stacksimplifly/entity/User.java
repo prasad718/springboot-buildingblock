@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "USER")
 //@JsonIgnoreProperties({"firstname","lastname"})
-@JsonFilter(value = "userFilter")
+//@JsonFilter(value = "userFilter")
 public class User  extends CollectionModel{
 	@Id
 	@GeneratedValue

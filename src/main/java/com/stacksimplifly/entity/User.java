@@ -11,27 +11,33 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.ResourceSupport;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 //Entity
 
+@ApiModel(description = "This model is to create a user")
 @Entity
 @Table(name = "USER")
 //@JsonIgnoreProperties({"firstname","lastname"})
 //@JsonFilter(value = "userFilter")
-public class User  extends CollectionModel{
+public class User  extends ResourceSupport{
+	
+	@ApiModelProperty(notes = "userid - Unique identifier of user", required = true, position = 1)
 	@Id
 	@GeneratedValue
 	private Long userid;
 	
+	@ApiModelProperty(notes = "user name should be format in flnamer", example = "DPrasad", required = false, position = 1)
+	@Size(min=2,max = 50)
 	@NotEmpty(message = "User Name Mandtory field. Please provide user name")
 	@Column(name = "user_name", length = 50, nullable = false, unique = true)
 	private String username;
 
-	@Size(min=2 , message ="First Name Should have at least 2 characters")
+	
+	@Size(min=2 ,max = 50, message ="First Name Should have at least 2 characters")
 	@Column(name = "first_name", length = 50, nullable = false)
 	private String firstname;
 	

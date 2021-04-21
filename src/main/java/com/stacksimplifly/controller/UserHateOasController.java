@@ -6,10 +6,10 @@ import java.util.Optional;
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +38,7 @@ public class UserHateOasController {
 
 
 	@GetMapping("/{id}")
-	public EntityModel<User> getUserById(@PathVariable("id") @Min(1) Long id) {
+	public Resource<User> getUserById(@PathVariable("id") @Min(1) Long id) {
 
 		try {
 			
@@ -48,10 +48,10 @@ public class UserHateOasController {
 			
 			Long userId=user.getUserid();
 			
-			EntityModel<User> resource=EntityModel.of(user);
-		
-			resource.add(WebMvcLinkBuilder.linkTo(this.getClass()).slash(userId).withSelfRel());
-			return resource;
+			Link selflink = ControllerLinkBuilder.linkTo(this.getClass()).slash(userId).withSelfRel();
+			user.add(selflink);
+			Resource<User> finalResource = new Resource<User>(user);
+			return finalResource;
 		} catch (UserNotFoundException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
 		}
@@ -59,33 +59,27 @@ public class UserHateOasController {
 	}
 
 	@GetMapping
-	public CollectionModel<User> getAllUsers() throws UserNotFoundException {
+	public Resources<User> getAllUsers() throws UserNotFoundException {
 		
-		List<User> userList=userService.getAllUsers();
+List<User> allusers = userService.getAllUsers();
 		
-		for(User user: userList) {
-		
-		long userId=user.getUserid();
-		
-		Link link=WebMvcLinkBuilder.linkTo(this.getClass()).slash(userId).withSelfRel();
-		
-		user.add(link);
-		
-		CollectionModel<Order> orders= WebMvcLinkBuilder.methodOn(OrderHateoasController.class).getAllOrders(userId);
-		
-		Link orderLink=WebMvcLinkBuilder.linkTo(orders).withRel("all-orders");
-		user.add(orderLink);
-		
+		for(User user : allusers) {
+			//Self Link 
+			Long userid = user.getUserid();
+			Link selflink = ControllerLinkBuilder.linkTo(this.getClass()).slash(userid).withSelfRel();
+			user.add(selflink);
+			
+			//Relationship link with getAllOrders
+			Resources<Order> orders = ControllerLinkBuilder.methodOn(OrderHateoasController.class)
+					.getAllOrders(userid);
+			Link orderslink = ControllerLinkBuilder.linkTo(orders).withRel("all-orders");
+			user.add(orderslink);
+			
 		}
-		
-		Link selfLink= WebMvcLinkBuilder.linkTo(this.getClass()).withSelfRel();
-		
-		
-		
-		CollectionModel<User>  resource=CollectionModel.of(userList,selfLink);
-		
-		return resource;
-		
+		//Self link for getAllUsers
+		Link selflinkgetAllUsers = ControllerLinkBuilder.linkTo(this.getClass()).withSelfRel();
+		Resources<User> finalResources = new Resources<User>(allusers, selflinkgetAllUsers);
+		return finalResources;
 	}
 
 	
